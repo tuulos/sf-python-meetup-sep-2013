@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Metaprogramming Python for Big Data</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <style>
+        .reveal table tbody th{
+            font-weight: bold;
+        }
+        .reveal table tbody th h4{
+            font-weight: normal;
+        }
+        .reveal .deliroll{
+            color: #00aff0; /* rgba(0, 0, 255, 0.7); */
+        }
+        .reveal .redshift{
+            color: rgba(240, 67, 0, 1.0);
+        }
+        .reveal .deliroll-bg{
+            padding-right: 10px;
+            padding-left: 10px;
+            font-size: 80%;
+            color: white;
+            text-align: right;
+            background: #00aff0;  /* rgba(0, 0, 255, 0.7); */
+        }
+        .reveal .redshift-bg{
+            padding-right: 10px;
+            padding-left: 10px;
+            font-size: 80%;
+            color: white;
+            text-align: right;
+            background: rgba(240, 67, 0, 1.0);
+        }
+        .reveal .benchmark h3{
+            text-transform: none;
+        }
+        .reveal .benchmark table thead{
+            padding-bottom: 50px;
+        }
+        .reveal .quote{
+            line-height: 5em;
+        }
+        .reveal code{
+            font-size: 80%;
+        }
+        .reveal section img{
+            border: 0px;
+            box-shadow: none;
+            vertical-align: middle;
+        }
+
+        .reveal .archbox{
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 70%;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.05);
+            line-height: 1.8em;
+        }
+
+        .reveal .architecture{
+            line-height: 1em;
+        }
+
+        .reveal .highlight{
+            background: rgba(0, 175, 240, 0.4);
+        }
+
+        .reveal a{
+            font-size: 60%;
+        }
+
+        .reveal iframe {
+            overflow: hidden;
+            scrolling: no;
+            max-width: 200%;
+            max-height: 200%;
+        }
+
+        .section .framediv{
+            top: 0px;
+            width: 600px;
+            height: 600px;
+        }
+
+        .logoroll{
+            top: -300px;
+            right: 300px;
+        }
+
+        .reveal .title-slide{
+            text-align: left;
+        }
+
+        </style>
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+<section data-transition="cube" data-background-position="90% 0%" data-background="adroll-rolls.png" data-background-size="250px" class="title-slide">
+<h3 style="margin-top: 200px">A billion rows per second</h3>
+<h2>Metaprogramming Python for Big Data</h2>
+<h3 class="deliroll">
+<br>
+Ville Tuulos<br>
+<span style="color: #999">Principal Engineer @ AdRoll</span>
+</h4>
+<span style="color: #666; font-size: 80%">ville.tuulos@adroll.com</span>
+</section>
+
+<section data-transition="fade">
+<h4>We faced the key technical challenge of modern Business Intelligence:</h4>
+<h3 class="fragment">How to query tens of billions of events interactively?</h3>
+</section>
+
+<section data-transition="fade">
+<h3>Our solution, <span class="deliroll">DeliRoll</span>, is implemented in Python</span>.</h3>
+<h3 class="fragment">Everyone knows that Python is SLOW.</h3>
+<h3 class="fragment redshift">You can't handle big data with low latency in Python!</h3>
+</section>
+
+<section data-transition="linear">
+<h1>Small Benchmark</h1>
+</section>
+
+<section data-transition="fade">
+<ul>
+<li>Data: 1.5 billion rows, 400 columns - 660GB.</li>
+<li>Smaller execution time is better.</li>
+<li>Fastest result chosen from 10 consecutive runs.</li>
+<li>Queries are cached, results are not.</li>
+</ul>
+</section>
+
+<section data-transition="fade">
+    <h2>Setup</h2><br>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th width="35%"></th>
+                <th><h3 class="deliroll">DeliRoll</h3></th>
+                <th><h3 class="redshift">Amazon Redshift</h3></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><th>Instance type</th><td>cr1.8xlarge</td><td>Redshift 8XL<td></tr>
+            <tr><th>Instances</th><td>1</td><td>3</td></tr>
+            <tr><th>Cores</th><td>16</td><td>32</td></tr>
+            <tr><th>RAM</th><td>244GB</td><td>240GB</td></tr>
+            <tr class="fragment"><th>Cost / Month</th><td>$2,520</td><td>$9,792</td></tr>
+        </tbody>
+    </table>
+    <div style="margin-top: 70px" class="fragment">
+    <h4>Compare: Redshift is reported to be 10x faster than Hive</h4>
+    <a href="http://www.slideshare.net/Hapyrus/amazon-redshift-is-10x-faster-and-cheaper-than-hadoop-hive">
+    http://www.slideshare.net/Hapyrus/amazon-redshift-is-10x-faster-and-cheaper-than-hadoop-hive
+    </a><br>
+    <a href="http://blog.aggregateknowledge.com/2013/05/16/aws-redshift-how-amazon-changed-the-game/">
+    http://blog.aggregateknowledge.com/2013/05/16/aws-redshift-how-amazon-changed-the-game
+    </a>
+    <a href="http://nerds.airbnb.com/redshift-performance-cost/">
+    http://nerds.airbnb.com/redshift-performance-cost
+    </a>
+    </div>
+</section>
+
+<section class="benchmark" data-transition="fade">
+    <h3>Aggregate One Column</h3>
+    <code>SELECT sum(column) FROM table</code><br><br>
+    <table width="90%">
+        <tbody>
+            <tr>
+                <th width="10%"><h4 class="redshift">Redshift</h4></th>
+                <td width="90%"><div class="redshift-bg" style="width: 200px;">1.9s</div></td>
+            </tr>
+            <tr>
+                <th><h4 class="deliroll">DeliRoll</h4></th>
+                <td><div class="deliroll-bg" style="width: 63px;">0.6s</div></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="benchmark" data-transition="fade">
+    <h3>Group by Dimension</h3>
+    <code>SELECT sum(column) FROM table GROUP BY dimension</code><br><br>
+    <table width="90%">
+        <tbody>
+            <tr>
+                <th width="10%"><h4 class="redshift">Redshift</h4></th>
+                <td width="90%"><div class="redshift-bg" style="width: 700px;">21.6s</div></td>
+            </tr>
+            <tr>
+                <th><h4 class="deliroll">DeliRoll</h4></th>
+                <td><div class="deliroll-bg" style="width: 562px;">17.4s</div></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="benchmark" data-transition="fade">
+    <h3>Aggregate 7 Columns</h3>
+    <code>SELECT sum(col1),sum(col2),...,sum(col7) FROM table</code><br><br>
+    <table width="90%">
+        <tbody>
+            <tr>
+                <th width="10%"><h4 class="redshift">Redshift</h4></th>
+                <td width="90%"><div class="redshift-bg" style="width: 500px;">4.8s</div></td>
+            </tr>
+            <tr>
+                <th><h4 class="deliroll">DeliRoll</h4></th>
+                <td><div class="deliroll-bg" style="width: 73px;">0.7s</div></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="benchmark" data-transition="fade">
+    <h3>Aggregate 250 Columns</h3>
+    <code>SELECT sum(col1),sum(col2),...,sum(col250) FROM table</code><br><br>
+    <table width="90%">
+        <tbody>
+            <tr>
+                <th width="10%"><h4 class="redshift">Redshift</h4></th>
+                <td width="90%"><div class="redshift-bg" style="width: 800px;">...8 minutes!</div></td>
+                <!--<div class="redshift-bg" style="width: 300px; float: left;">&nbsp;</div><div class="redshift-bg" style="width: 2px; float: left; margin-left: 2px; margin-right: 2px;">&nbsp;</div><div class="redshift-bg" style="width: 200px; float: left">4.8s</div></td>-->
+            </tr>
+            <tr>
+                <th><h4 class="deliroll">DeliRoll</h4></th>
+                <td><div class="deliroll-bg" style="width: 73px;">1.9s</div></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+<section>
+<h1>Unpossible!</h1>
+</section>
+
+<section data-transition="fade">
+<h3>DeliRoll Architecture</h3>
+<div class="architecture">
+<div class="archbox">Frontend (e.g. Tableau)</div>
+&#x2b07;
+<div class="archbox">PostgreSQL</div>
+&#x2b07;
+<div class="archbox highlight">Multicorn</div>
+&#x2b07;
+<div class="archbox">DeliRoll Server</div>
+&#x2b07;
+<div class="archbox">DeliRoll Worker</div>
+&#x2b07;
+<div class="archbox highlight">Numba</div>
+&#x2b07;
+<div class="archbox">LLVM</div>
+&#x2b07;
+<div class="archbox highlight">Densely-encoded data</div>
+</div>
+</section>
+
+<section data-transition="linear">
+    <blockquote>
+        <p>Bad programmers worry about the code.</p>
+        <p>Good programmers worry about</p>
+        <p><h2 style="padding-top: 30px; padding-bottom: 20px" class="deliroll">data structures</h2></p>
+        <p>and their relationships.</p>
+        <p><br><strong>Linus Torvalds</strong></p>
+    </blockquote>
+</section>
+
+<section data-transition="fade">
+<h2>Raw Data: Homogeneous Events</h2>
+<br>
+<table>
+<tr><td>{"cookie_set":</td><td><em>true</em></td><td>,"country":</td><td><em>"Sweden"</em></td><td>,"cost":</td><td><em>840</em></td><td>}</td></tr>
+<tr><td>{"cookie_set":</td><td><em>false</em></td><td>,"country":</td><td><em>"UK"</em></td><td>,"cost":</td><td><em>23</em></td><td>}</td></tr>
+<tr><td>{"cookie_set":</td><td><em>true</em></td><td>,"country":</td><td><em>"China"</em></td><td>,"cost":</td><td><em>11</em></td><td>}</td></tr>
+</table>
+</section>
+
+<section data-transition="fade">
+<h2>Remove Redundant Field Names</h2>
+<br>
+<table>
+<tr><td style="visibility: hidden">{"cookie_set":</td><td><em>true</em></td><td style="visibility: hidden">,"country":</td><td><em>"Sweden"</em></td><td style="visibility: hidden">,"cost":</td><td><em>840</em></td><td style="visibility: hidden">}</td></tr>
+<tr><td style="visibility: hidden">{"cookie_set":</td><td><em>false</em></td><td style="visibility: hidden">,"country":</td><td><em>"UK"</em></td><td style="visibility: hidden">,"cost":</td><td><em>23</em></td><td style="visibility: hidden">}</td></tr>
+<tr><td style="visibility: hidden">{"cookie_set":</td><td><em>true</em></td><td style="visibility: hidden">,"country":</td><td><em>"China"</em></td><td style="visibility: hidden">,"cost":</td><td><em>11</em></td><td style="visibility: hidden">}</td></tr>
+</table>
+</section>
+
+<section data-transition="fade">
+<h2>Encode Values in Binary</h2>
+<br>
+<table>
+<tr>
+    <td style="visibility: hidden">{"cookie_set":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">,"country":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">,"cost":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">}</td>
+</tr>
+<tr>
+    <td style="visibility: hidden">{"cookie_set":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">,"country":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">,"cost":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">}</td>
+</tr>
+<tr>
+    <td style="visibility: hidden">{"cookie_set":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">,"country":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">,"cost":</td>
+    <td class="redshift-bg">integer</td>
+    <td style="visibility: hidden">}</td>
+</tr>
+</table>
+</section>
+
+<section data-transition="fade" data-iframe="data/matrix0.html">
+<h3>Trick #0: Sparse Matrix</h3>
+<h4>100% of the original size</h4>
+<div class="framediv">
+    <iframe scrolling='no' width='600' height='600' src=''></iframe>
+</div>
+</section>
+
+<section data-transition="fade" data-iframe="data/matrix1.html">
+<h3>Trick #1: Typed Columns</h3>
+<h4>50% of the original size</h4>
+<div class="framediv">
+    <iframe scrolling='no' width='600' height='600' src=''></iframe>
+</div>
+</section>
+
+<section data-transition="fade" data-iframe="data/matrix2.html">
+<h3>Trick #2: Sort Dimensions</h3>
+<h4>50% of the original size</h4>
+<div class="framediv">
+    <iframe scrolling='no' width='600' height='600' src=''></iframe>
+</div>
+</section>
+
+<section data-transition="fade" data-iframe="data/matrix3.html">
+<h3>Trick #3: Merge Dimensions</h3>
+<h4>20% of the original size</h4>
+<div class="framediv">
+    <iframe scrolling='no' width='600' height='600' src=''></iframe>
+</div>
+</section>
+
+<section data-transition="fade" data-iframe="data/matrix4.html">
+<h3>Trick #4: Dense Encoding</h3>
+<h4>15% of the original size</h4>
+<div class="framediv">
+    <iframe scrolling='no' width='600' height='600' src=''></iframe>
+</div>
+</section>
+
+<section>
+<h2>Why Compressed Data Structure?</h2>
+<p style="margin-top: 40px;">
+Compression ratio dropped from 11:1 to 1.5:1</p>
+<h3 class="deliroll">Less redundancy</h3>
+<p style="margin-top: 40px;">
+The dense encoding results to faster computation</p>
+<h3 class="deliroll">L1/L2 cache efficiency</h3>
+<p style="margin-top: 40px;">
+The dense encoding is partially</p>
+<h3 class="deliroll">self-indexing</h3>
+</section>
+
+<section data-transition="linear">
+<img src="numba-logo.png" style="border: 0px">
+<p>Numba is a just-in-time specializing compiler which compiles annotated Python and NumPy code to LLVM.</p>
+<br>
+<pre><code data-trim contenteditable>
+from numba import autojit
+
+@autojit
+def sum2d(arr):
+    M, N = arr.shape
+    result = 0.0
+    for i in range(M):
+        for j in range(N):
+            result += arr[i,j]
+    return result
+</code></pre>
+</section>
+
+<section data-transition="fade">
+<h4>Python generates a Python function based on the query</h4>
+<pre><code data-trim contenteditable>
+with self.DEF([(m, types[m]) for m in args]):
+    self.INIT_SPARSEVAR(score_metrics)
+    with self.FOR_ALL_ROWS(has_row_filter):
+        with self.ROW_MATCHES(flags, where_expr, score_metrics, partitioned):
+            self.ASSIGN_METRICS(score_metrics)
+</code></pre>
+<div class="fragment">
+<h4>which compiles to Numba-compatible low-level Python</h4>
+<pre><code data-trim contenteditable>
+while (_indptr_idx < _indptr_len):
+    while (True):
+        _byte = _indptr[_indptr_idx]
+        if (_byte & 1):
+            _indptr_row += (_byte >> 1) + 1
+            _indptr_val |= (_byte >> 1) << _shift
+</code></pre>
+</div>
+<div class="fragment">
+<h4>which compiles to LLVM</h4>
+<pre><code data-trim contenteditable>
+  while_condition_20:15:
+    %_shift_2 = phi i32
+    %_indptr_idx_3 = phi i64
+    while_body_21:12:
+       %81 = mul i64 %_indptr_idx_3, %29
+       %82 = add i64 0, %81
+       %83 = getelementptr i8* %21, i64 %82
+</code></pre>
+</div>
+<div class="fragment">
+<h4>which compiles to optimized machine code, on the fly.</h4>
+</div>
+</section>
+
+<section data-transition="linear">
+<img src="multicorn-logo.png">
+<p>Multicorn allows you to access any data source in your PostgreSQL database in Python.</p>
+</section>
+
+<section data-transition="fade">
+    <h4>In Postgres, create a new Foreign Data Table using Multicorn</h4>
+    <pre><code data-trim contenteditable>
+CREATE FOREIGN TABLE constanttable (
+    test character varying, test2 character varying
+) server multicorn_srv options (
+    wrapper 'myfdw.ConstantForeignDataWrapper'
+)
+SELECT * from constanttable;
+    </code></pre>
+<div class="fragment">
+    <h4>SQL query gets forwarded to our Python class by Postgres</h4>
+    <pre><code data-trim contenteditable>
+class ConstantForeignDataWrapper(ForeignDataWrapper):
+    def execute(self, quals, columns):
+        for index in range(4):
+            line = {}
+            for column_name in self.columns:
+                line[column_name] = '%s %s' % (column_name, index)
+            yield line
+    </code></pre>
+</div>
+<div class="fragment">
+    <h4>Query is evaluated and results are returned back to Postgres</h4>
+    <pre><code data-trim contenteditable>
+  test     |  test2
+---------+----------
+ test 0  | test2 0
+ test 1  | test2 1
+ test 2  | test2 2
+ test 3  | test2 3
+    </code></pre>
+</div>
+</section>
+<section data-transition="linear">
+    <h2 class="redshift">Cheating?</h2>
+    <div class="fragment">
+    <p><br>That's the whole point.</p><br>
+    <p>You can use a high-level language to <strong><span class="deliroll">quickly</span></strong> implement
+    <strong><span class="deliroll">domain-specific</span></strong> solutions that
+    <strong><span class="deliroll">outperform</span></strong> generic solutions, regardless of the language they use.
+    </p>
+    </div>
+</section>
+
+<section data-transition="fade">
+    <h3>And, most importantly,</h3>
+    <blockquote style="font-size: 120%; line-height: 1.5em;">
+    You dare to do things<br>
+    that would be too painful to do<br>
+    with a lower-level language.
+    </blockquote>
+</section>
+
+<section data-transition="linear">
+    <h2>Thank You!</h2><br>
+    <p>
+    <img width="300px" src="logo.png"/><h3>is Hiring</h3>
+    </p>
+    <br>
+    <p><em>Python, Erlang, Big Data, AWS</em></p>
+    <br><h4>Fastest Growing Advertising Company Two Years in a Row</h4>
+</section>
+
+            </div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+            Reveal.addEventListener("slidechanged", function(ev){
+                var slide = Reveal.getCurrentSlide();
+                var framesrc = slide.getAttribute("data-iframe");
+                if (framesrc){
+                    var all = window.document.getElementsByClassName("framediv");
+                    for (i = 0; i < all.length; i++)
+                        all[i].innerHTML = "<iframe width='600' height='600' src=''></iframe>";
+                    html = "<iframe scrolling='no' width='600' height='600' src='" +
+                            framesrc + "'></iframe>";
+                    slide.getElementsByClassName("framediv")[0].innerHTML = html;
+                }
+            });
+
+		</script>
+
+	</body>
+</html>
