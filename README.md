@@ -1,5 +1,8 @@
-
 ### Ville's DeliRoll presentation given at the SF Python Meetup on Sep 11th, 2013
+
+### Video
+
+http://www.youtube.com/watch?v=rXj5nayS7Yg
 
 ### Slides
 
